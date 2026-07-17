@@ -35,7 +35,7 @@ export default function Home() {
         alt="A collection of 3d printed models, including the US capital building, statue of Greek Philosopher, and more."
       />
       <Image
-        className="mask-t-from-0%"
+        className="mask-t-from-0% md:hidden"
         src={mobileHeroImage.src}
         width={mobileHeroImage.width}
         height={mobileHeroImage.height}
