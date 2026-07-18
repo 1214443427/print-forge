@@ -4,6 +4,7 @@ import Image from "next/image";
 import modelsIcon from "@/public/img/layer.svg";
 import globeIcon from "@/public/img/globe.svg";
 import flagIcon from "@/public/img/flag.svg";
+import logo from "@/public/img/printforge-logo-icon.svg";
 
 function page() {
   return (
@@ -108,6 +109,7 @@ function page() {
           </p>
         </section>
       </div>
+      <Image className="hidden md:block my-25 opacity-25" src={logo} alt="" />
     </div>
   );
 }
