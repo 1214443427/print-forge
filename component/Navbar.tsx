@@ -1,11 +1,16 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
 import mobileLogo from "@/public/img/printforge-logo-icon.svg";
 import desktopLogo from "@/public/img/printforge-logo.svg";
 import Link from "next/link";
 import NavLink from "./NavLink";
+import { usePathname } from "next/navigation";
 
 function Navbar() {
+  const pathname = usePathname();
+  const currentActivePath = pathname.split("/")[1];
   return (
     <nav className="flex justify-between px-5 md:px-10 py-1.5">
       <Link href={"/"}>
@@ -25,8 +30,12 @@ function Navbar() {
         />
       </Link>
       <ul className="flex gap-10 items-center">
-        <NavLink url="/3d-models">3D Models</NavLink>
-        <NavLink url="/about">About</NavLink>
+        <NavLink url="/3d-models" active={currentActivePath === "3d-models"}>
+          3D Models
+        </NavLink>
+        <NavLink url="/about" active={currentActivePath === "about"}>
+          About
+        </NavLink>
       </ul>
     </nav>
   );
