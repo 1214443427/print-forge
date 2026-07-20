@@ -5,39 +5,41 @@ import LikesWidget from "./LikesWidget";
 import TagPill from "./TagPill";
 
 function ModelCard({
+  id,
   name,
-  tag,
+  category,
   likes,
   description,
-  imageUrl,
-  slug,
+  image,
   type,
 }: {
+  id: number;
   name: string;
-  tag: string;
+  category: string;
   likes: number;
   description: string;
-  imageUrl: string;
-  slug: string;
+  image: string;
   type?: string;
 }) {
   //  ${type === "compact" ? "w-1/2" : "w-full"}
   return (
-    <Link href={`3d-models/${slug}`}>
-      <div className={`flex flex-col sm:w-67 rounded-2xl`}>
+    <Link href={`3d-models/${id}`} className="w-fit h-full">
+      <div className={`flex flex-col sm:w-67 rounded-2xl h-full`}>
         <Image
-          src={imageUrl}
+          src={image}
           width={268}
           height={268}
           alt={`Image of ${description}`}
           className="rounded-t-lg w-full object-cover"
         />
 
-        <div className="flex flex-col border border-t-0 rounded-b-lg border-gray-300 p-3.5 gap-4">
+        <div className="flex flex-col border border-t-0 rounded-b-lg border-gray-300 p-3.5 gap-4 h-full">
           <h2 className="font-bold text-2xl">{name}</h2>
-          {type === "compact" && <p className="text-xl">{description}</p>}
-          <TagPill tag={tag} />
-          <LikesWidget likes={likes} />
+          {type !== "compact" && <p className="text-xl">{description}</p>}
+          <div className="flex flex-col gap-4 mt-auto">
+            <TagPill tag={category} />
+            <LikesWidget likes={likes} />
+          </div>
         </div>
       </div>
     </Link>

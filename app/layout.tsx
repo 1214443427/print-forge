@@ -1,6 +1,6 @@
 import Navbar from "@/component/Navbar";
 import "./globals.css";
-import { Albert_Sans, Montserrat_Alternates } from "next/font/google";
+import { Albert_Sans, Montserrat_Alternates, Roboto } from "next/font/google";
 
 const albertSans = Albert_Sans({
   subsets: ["latin"],
@@ -12,6 +12,11 @@ const montserrat = Montserrat_Alternates({
   display: "swap",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-montserrat",
+});
+
+const roboto = Roboto({
+  display: "swap",
+  subsets: ["latin"],
 });
 
 export default function RootLayout({

@@ -1,8 +1,14 @@
 import ModelsGrid from "@/component/ModelsGrid";
 import SearchForm from "@/component/SearchForm";
+import { getModels } from "@/lib/models";
 import React from "react";
 
 function page() {
+  const result = getModels();
+  if (!result.ok) {
+    return null;
+  }
+  const model = result.models;
   return (
     <div className="flex flex-col p-5 w-full sm:p-10">
       <div className="flex justify-between mb-5">
@@ -14,7 +20,7 @@ function page() {
         </h1>
         <SearchForm />
       </div>
-      <ModelsGrid />
+      <ModelsGrid models={model} />
     </div>
   );
 }

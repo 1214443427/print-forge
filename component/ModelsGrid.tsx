@@ -1,7 +1,8 @@
 import React from "react";
 import ModelCard from "./ModelCard";
+import { Model } from "@/lib/types";
 
-function ModelsGrid() {
+function ModelsGrid({ models }: { models: Model[] }) {
   const type = "compact";
   const testData = [
     {
@@ -25,10 +26,10 @@ function ModelsGrid() {
   ];
   return (
     <div
-      className={`grid ${type === "compact" ? "grid-cols-2" : "grid-cols-1"} gap-5`}
+      className={`grid ${type === "compact" ? "grid-cols-2" : "grid-cols-1"} items-stretch md:grid-cols-[repeat(auto-fit,268px)] gap-5`}
     >
-      {testData.map((model) => (
-        <ModelCard key={model.slug} {...model} />
+      {models.map((model) => (
+        <ModelCard key={model.id} {...model} />
       ))}
     </div>
   );

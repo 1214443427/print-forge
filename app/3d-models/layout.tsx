@@ -7,7 +7,7 @@ export default function Layout({
 }>) {
   return (
     <div className="flex flex-col md:flex-row w-full h-full sm:p-10 sm:gap-20">
-      <CategoryNavbar categories={["all", "3d-printer"]} />
+      <CategoryNavbar />
       {children}
     </div>
   );

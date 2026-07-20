@@ -30,10 +30,10 @@ function Navbar() {
         />
       </Link>
       <ul className="flex gap-10 items-center">
-        <NavLink url="/3d-models" active={currentActivePath === "3d-models"}>
+        <NavLink url="/3d-models" type="navbar">
           3D Models
         </NavLink>
-        <NavLink url="/about" active={currentActivePath === "about"}>
+        <NavLink url="/about" type="navbar">
           About
         </NavLink>
       </ul>
