@@ -30,3 +30,32 @@ export function getModels():
     throw error;
   }
 }
+
+export function getModelsByCategorySlug(categorySlug: string):
+  | {
+      ok: true;
+      models: Model[];
+    }
+  | {
+      ok: false;
+      error: string;
+    } {
+  try {
+    const data = db
+      .prepare(
+        `
+            SELECT * FROM models WHERE category=?
+            `,
+      )
+      .all([categorySlug]);
+    return {
+      ok: true,
+      models: data as Model[],
+    };
+  } catch (error) {
+    if (error instanceof SqliteError) {
+      return { ok: false, error: error.message };
+    }
+    throw error;
+  }
+}
