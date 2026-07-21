@@ -1,12 +1,24 @@
 import ModelsGrid from "@/component/ModelsGrid";
 import { getCategoryBySlug } from "@/lib/categories";
-import { getModelsByCategorySlug } from "@/lib/models";
+import {
+  getModelBySlug,
+  getModels,
+  getModelsByCategorySlug,
+} from "@/lib/models";
 import React from "react";
 
-async function page({ params }: { params: Promise<{ category: string }> }) {
+async function page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ category: string }>;
+  searchParams: Promise<{ sort?: string }>;
+}) {
   const { category } = await params;
-  const result = getModelsByCategorySlug(category);
+  const sort = (await searchParams).sort?.toLowerCase();
+  const result = getModels({ category, sort });
   if (!result.ok) {
+    console.log(result.error);
     return <h1>500 internal DB error</h1>;
   }
   const categoryResult = getCategoryBySlug(category);

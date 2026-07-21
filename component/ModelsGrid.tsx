@@ -1,6 +1,7 @@
 import React from "react";
 import ModelCard from "./ModelCard";
 import { Model } from "@/lib/types";
+import SortControls from "./SortControls";
 
 function ModelsGrid({ models }: { models: Model[] }) {
   const type = "compact";
@@ -17,12 +18,15 @@ function ModelsGrid({ models }: { models: Model[] }) {
   }
 
   return (
-    <div
-      className={`grid ${type === "compact" ? "grid-cols-2" : "grid-cols-1"} items-stretch md:grid-cols-[repeat(auto-fit,268px)] gap-5`}
-    >
-      {models.map((model) => (
-        <ModelCard key={model.id} {...model} />
-      ))}
+    <div className="container">
+      <SortControls />
+      <div
+        className={`grid ${type === "compact" ? "grid-cols-2" : "grid-cols-1"} items-stretch md:grid-cols-[repeat(auto-fit,268px)] gap-5`}
+      >
+        {models.map((model) => (
+          <ModelCard key={model.id} {...model} />
+        ))}
+      </div>
     </div>
   );
 }

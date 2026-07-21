@@ -2,7 +2,15 @@ import { SqliteError } from "better-sqlite3";
 import { db } from "./db";
 import { Model } from "./types";
 
-export function getModels(search?: string):
+export function getModels({
+  search,
+  category,
+  sort,
+}: {
+  search?: string;
+  category?: string;
+  sort?: string;
+}):
   | {
       ok: true;
       models: Model[];
@@ -16,7 +24,28 @@ export function getModels(search?: string):
     const placeholders = [];
     if (search) {
       placeholders.push(`%${search}%`, `%${search}%`, `%${search}%`);
-      query += ` WHERE category LIKE ? OR name LIKE ? OR DESCRIPTION LIKE ?`;
+      query += ` WHERE (category LIKE ? OR name LIKE ? OR DESCRIPTION LIKE ?)`;
+    }
+
+    if (search && category) {
+      query += ` AND`;
+    }
+
+    if (category) {
+      placeholders.push(category);
+      query += ` WHERE category=?`;
+    }
+
+    if (sort) {
+      if (sort === "popular") {
+        query += ` ORDER BY likes DESC`;
+      }
+      if (sort === "alpha") {
+        query += ` ORDER BY name `;
+      }
+      if (sort === "recent") {
+        query += ` ORDER BY dateAdded DESC`;
+      }
     }
 
     const data = db.prepare(query).all(placeholders);
@@ -32,7 +61,10 @@ export function getModels(search?: string):
   }
 }
 
-export function getModelsByCategorySlug(categorySlug: string):
+export function getModelsByCategorySlug(
+  categorySlug: string,
+  sort: string,
+):
   | {
       ok: true;
       models: Model[];
@@ -42,13 +74,21 @@ export function getModelsByCategorySlug(categorySlug: string):
       error: string;
     } {
   try {
-    const data = db
-      .prepare(
-        `
-            SELECT * FROM models WHERE category=?
-            `,
-      )
-      .all([categorySlug]);
+    let query = `SELECT * FROM models WHERE category=?`;
+
+    if (sort) {
+      if (sort === "popular") {
+        query += ` ORDER BY likes DESC`;
+      }
+      if (sort === "alpha") {
+        query += ` ORDER BY name `;
+      }
+      if (sort === "recent") {
+        query += ` ORDER BY dateAdded DESC`;
+      }
+    }
+
+    const data = db.prepare(query).all([categorySlug]);
     return {
       ok: true,
       models: data as Model[],
@@ -90,5 +130,3 @@ export function getModelBySlug(slug: string):
     throw error;
   }
 }
-
-console.log(getModels("3d-printer"));
