@@ -1,10 +1,14 @@
 import React from "react";
 import Form from "next/form";
 
-function SearchForm() {
+function SearchForm({ search }: { search: string }) {
   return (
-    <Form className="w-full md:w-auto">
+    <Form action={"/3d-models"} className="w-full md:w-auto">
       <input
+        id="search"
+        name="search"
+        defaultValue={search}
+        autoComplete="off"
         className="w-full md:w-auto rounded-full border border-black py-1.5 px-4 placeholder:text-black"
         placeholder="Search for a model"
       ></input>

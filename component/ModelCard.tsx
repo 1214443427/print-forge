@@ -23,7 +23,7 @@ function ModelCard({
 }) {
   //  ${type === "compact" ? "w-1/2" : "w-full"}
   return (
-    <Link href={`3d-models/${id}`} className="w-fit h-full">
+    <Link href={`/3d-models/${id}`} className="w-fit h-full">
       <div className={`flex flex-col sm:w-67 rounded-2xl h-full`}>
         <Image
           src={image}

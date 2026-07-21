@@ -2,7 +2,7 @@ import { SqliteError } from "better-sqlite3";
 import { db } from "./db";
 import { Model } from "./types";
 
-export function getModels():
+export function getModels(search?: string):
   | {
       ok: true;
       models: Model[];
@@ -12,13 +12,14 @@ export function getModels():
       error: string;
     } {
   try {
-    const data = db
-      .prepare(
-        `
-            SELECT * FROM models
-            `,
-      )
-      .all();
+    let query = `SELECT * FROM models`;
+    const placeholders = [];
+    if (search) {
+      placeholders.push(`%${search}%`, `%${search}%`, `%${search}%`);
+      query += ` WHERE category LIKE ? OR name LIKE ? OR DESCRIPTION LIKE ?`;
+    }
+
+    const data = db.prepare(query).all(placeholders);
     return {
       ok: true,
       models: data as Model[],
@@ -89,3 +90,5 @@ export function getModelBySlug(slug: string):
     throw error;
   }
 }
+
+console.log(getModels("3d-printer"));

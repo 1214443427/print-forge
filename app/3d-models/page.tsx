@@ -3,12 +3,25 @@ import SearchForm from "@/component/SearchForm";
 import { getModels } from "@/lib/models";
 import React from "react";
 
-function page() {
+async function page({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string }>;
+}) {
+  const search = (await searchParams).search?.toLowerCase() || "";
   const result = getModels();
   if (!result.ok) {
     return null;
   }
-  const model = result.models;
+  let models = result.models;
+  if (search) {
+    models = models.filter(
+      (model) =>
+        model.name.includes(search) ||
+        model.description.includes(search) ||
+        model.category.includes(search),
+    );
+  }
   return (
     <div className="flex flex-col p-5 w-full sm:p-10">
       <div className="flex justify-between mb-5">
@@ -16,11 +29,11 @@ function page() {
           className="sr-only md:not-sr-only font-montserrat text-3xl font-bold my-5 mr-auto"
           aria-hidden
         >
-          3D models
+          {search ? `Search results for "${search}"` : "3D models"}
         </h1>
-        <SearchForm />
+        <SearchForm search={search} />
       </div>
-      <ModelsGrid models={model} />
+      <ModelsGrid models={models} />
     </div>
   );
 }
