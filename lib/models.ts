@@ -25,13 +25,12 @@ export function getModels({
     if (search) {
       placeholders.push(`%${search}%`, `%${search}%`, `%${search}%`);
       query += ` WHERE (category LIKE ? OR name LIKE ? OR DESCRIPTION LIKE ?)`;
-    }
 
-    if (search && category) {
-      query += ` AND`;
-    }
-
-    if (category) {
+      if (category) {
+        placeholders.push(category);
+        query += ` AND category=?`;
+      }
+    } else if (category) {
       placeholders.push(category);
       query += ` WHERE category=?`;
     }

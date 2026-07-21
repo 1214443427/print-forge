@@ -1,9 +1,18 @@
-import React from "react";
+import React, { TransitionStartFunction } from "react";
 import ModelCard from "./ModelCard";
 import { Model } from "@/lib/types";
 import SortControls from "./SortControls";
+import LoadingPage from "./LoadingPage";
 
-function ModelsGrid({ models }: { models: Model[] }) {
+function ModelsGrid({
+  models,
+  isPending,
+  startTransition,
+}: {
+  models: Model[];
+  isPending: boolean;
+  startTransition: TransitionStartFunction;
+}) {
   const type = "compact";
 
   if (models.length === 0) {
@@ -19,13 +28,15 @@ function ModelsGrid({ models }: { models: Model[] }) {
 
   return (
     <div className="container">
-      <SortControls />
+      <SortControls startTransition={startTransition} />
       <div
         className={`grid ${type === "compact" ? "grid-cols-2" : "grid-cols-1"} items-stretch md:grid-cols-[repeat(auto-fit,268px)] gap-5`}
       >
-        {models.map((model) => (
-          <ModelCard key={model.id} {...model} />
-        ))}
+        {isPending ? (
+          <LoadingPage> Loading models... </LoadingPage>
+        ) : (
+          models.map((model) => <ModelCard key={model.id} {...model} />)
+        )}
       </div>
     </div>
   );
