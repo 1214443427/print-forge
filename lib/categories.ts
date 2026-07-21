@@ -34,3 +34,38 @@ export function getCategories():
     throw error;
   }
 }
+
+export function getCategoryBySlug(slug: string):
+  | {
+      ok: true;
+      category: Category;
+    }
+  | {
+      ok: false;
+      error: string;
+    } {
+  try {
+    const category = db
+      .prepare(
+        `
+            SELECT * FROM categories WHERE slug=?
+            `,
+      )
+      .get(slug);
+
+    console.log("logging", category, slug);
+
+    return {
+      ok: true,
+      category: category as Category,
+    };
+  } catch (error) {
+    if (error instanceof SqliteError) {
+      return {
+        ok: false,
+        error: error.message,
+      };
+    }
+    throw error;
+  }
+}

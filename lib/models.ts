@@ -59,3 +59,33 @@ export function getModelsByCategorySlug(categorySlug: string):
     throw error;
   }
 }
+
+export function getModelBySlug(slug: string):
+  | {
+      ok: true;
+      model: Model;
+    }
+  | {
+      ok: false;
+      error: string;
+    } {
+  try {
+    const id = Number(slug);
+    const data = db
+      .prepare(
+        `
+            SELECT * FROM models WHERE id=?
+            `,
+      )
+      .get(id);
+    return {
+      ok: true,
+      model: data as Model,
+    };
+  } catch (error) {
+    if (error instanceof SqliteError) {
+      return { ok: false, error: error.message };
+    }
+    throw error;
+  }
+}
