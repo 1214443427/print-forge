@@ -6,6 +6,7 @@ import {
   getModels,
   getModelsByCategorySlug,
 } from "@/lib/models";
+import { notFound } from "next/navigation";
 import React from "react";
 
 async function page({
@@ -25,8 +26,8 @@ async function page({
   }
   const categoryResult = getCategoryBySlug(category);
 
-  if (!categoryResult.ok) {
-    return <h1> 404 </h1>;
+  if (!categoryResult.ok || !categoryResult.category) {
+    notFound();
   }
 
   const categoryName = categoryResult.category.name;
