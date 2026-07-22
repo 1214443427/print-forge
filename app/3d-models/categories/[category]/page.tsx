@@ -14,12 +14,13 @@ async function page({
   searchParams,
 }: {
   params: Promise<{ category: string }>;
-  searchParams: Promise<{ search?: string; sort?: string }>;
+  searchParams: Promise<{ search?: string; sort?: string; page: string }>;
 }) {
   const { category } = await params;
-  const sort = (await searchParams).sort?.toLowerCase() ?? "";
-  const search = (await searchParams).search?.toLowerCase() ?? "";
-  const result = getModels({ category, sort, search });
+  const sort = (await searchParams).sort?.toLowerCase() || "";
+  const search = (await searchParams).search?.toLowerCase() || "";
+  const page = Number((await searchParams).page) || 1;
+  const result = getModels({ category, sort, search, page });
   if (!result.ok) {
     console.log(result.error);
     return <h1>500 internal DB error</h1>;

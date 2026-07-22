@@ -10,10 +10,11 @@ import { notFound } from "next/navigation";
 async function page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const result = getModelBySlug(id);
-  console.log(result);
+
   if (!result.ok || !result.model) {
     notFound();
   }
+
   return (
     <div className="flex flex-col justify-center items-center p-5 md:flex-row md:gap-10">
       <Link

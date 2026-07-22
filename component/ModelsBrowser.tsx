@@ -5,15 +5,18 @@ import SearchForm from "./SearchForm";
 import ModelsGrid from "./ModelsGrid";
 import { getModels } from "@/lib/models";
 import { Model } from "@/lib/types";
+import PaginationControls from "./PaginationControls";
 
 function ModelsBrowser({
   search,
   name,
   models,
+  totalPageNumber,
 }: {
   search?: string;
   name?: string;
   models: Model[];
+  totalPageNumber: number;
 }) {
   const [isPending, startTransition] = useTransition();
 
@@ -35,6 +38,7 @@ function ModelsBrowser({
         isPending={isPending}
         startTransition={startTransition}
       />
+      <PaginationControls totalPageNumber={totalPageNumber} />
     </div>
   );
 }

@@ -6,10 +6,14 @@ export function getModels({
   search,
   category,
   sort,
+  page,
+  modelsPerPage = 4,
 }: {
   search?: string;
   category?: string;
   sort?: string;
+  page: number;
+  modelsPerPage?: number;
 }):
   | {
       ok: true;
@@ -23,8 +27,8 @@ export function getModels({
     let query = `SELECT * FROM models`;
     const placeholders = [];
     if (search) {
-      placeholders.push(`%${search}%`, `%${search}%`, `%${search}%`);
-      query += ` WHERE (category LIKE ? OR name LIKE ? OR DESCRIPTION LIKE ?)`;
+      placeholders.push(`%${search}%`, `%${search}%`);
+      query += ` WHERE ( name LIKE ? OR DESCRIPTION LIKE ?)`;
 
       if (category) {
         placeholders.push(category);
@@ -47,10 +51,60 @@ export function getModels({
       }
     }
 
+    console.log(page);
+
+    query += ` LIMIT ${modelsPerPage}`;
+    const offset = (page - 1) * modelsPerPage;
+    query += ` OFFSET ${offset}`;
+
     const data = db.prepare(query).all(placeholders);
     return {
       ok: true,
       models: data as Model[],
+    };
+  } catch (error) {
+    if (error instanceof SqliteError) {
+      return { ok: false, error: error.message };
+    }
+    throw error;
+  }
+}
+
+export function getModelsCount({
+  search,
+  category,
+}: {
+  search?: string;
+  category?: string;
+}):
+  | {
+      ok: true;
+      count: number;
+    }
+  | {
+      ok: false;
+      error: string;
+    } {
+  let query = `SELECT COUNT(*) AS count FROM models`;
+  const placeholders = [];
+  if (search || category) {
+    const where = [];
+    if (search) {
+      where.push(`(name LIKE ? OR description LIKE ?)`);
+      placeholders.push(`%${search}%`, `%${search}%`);
+    }
+    if (category) {
+      where.push(`category=?`);
+      placeholders.push(category);
+    }
+    query += " WHERE ";
+    query += where.join(" AND ");
+  }
+  try {
+    const result = db.prepare(query).get(placeholders) as { count: number };
+    return {
+      ok: true,
+      count: result.count,
     };
   } catch (error) {
     if (error instanceof SqliteError) {
