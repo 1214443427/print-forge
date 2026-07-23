@@ -1,8 +1,5 @@
-import React, { TransitionStartFunction, useContext } from "react";
 import ModelCard from "./ModelCard";
 import { Model } from "@/lib/types";
-import SortControls from "./SortControls";
-import LoadingPage from "./LoadingPage";
 
 export function ModelsGrid({
   models,

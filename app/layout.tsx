@@ -14,11 +14,6 @@ const montserrat = Montserrat_Alternates({
   variable: "--font-montserrat",
 });
 
-const roboto = Roboto({
-  display: "swap",
-  subsets: ["latin"],
-});
-
 export default function RootLayout({
   children,
 }: Readonly<{

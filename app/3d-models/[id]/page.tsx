@@ -1,7 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import placeHolderImage from "@/public/img/placeholder.png";
 import LikesWidget from "@/component/LikesWidget";
 import TagPill from "@/component/TagPill";
 import { getModelBySlug } from "@/lib/models";

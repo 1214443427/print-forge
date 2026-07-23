@@ -4,7 +4,6 @@ import React, { useTransition } from "react";
 import SearchForm from "./SearchForm";
 import PaginationControls from "./PaginationControls";
 import SortControls from "./SortControls";
-import LoadingPage from "./LoadingPage";
 import BrowserContext from "./ModelsBrowserContext";
 import LoadOverlay from "./LoadOverlay";
 

@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
 import mobileLogo from "@/public/img/printforge-logo-icon.svg";
 import desktopLogo from "@/public/img/printforge-logo.svg";
 import Link from "next/link";
@@ -10,7 +9,6 @@ import { usePathname } from "next/navigation";
 
 function Navbar() {
   const pathname = usePathname();
-  const currentActivePath = pathname.split("/")[1];
   return (
     <nav className="flex justify-between px-5 md:px-10 py-1.5">
       <Link href={"/"}>

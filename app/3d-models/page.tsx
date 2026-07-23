@@ -1,6 +1,5 @@
 import ModelsBrowser from "@/component/ModelsBrowser";
 import ModelsGrid from "@/component/ModelsGrid";
-import SearchForm from "@/component/SearchForm";
 import { MODELS_PER_PAGE } from "@/lib/constants";
 import {
   clampPage,
@@ -8,8 +7,6 @@ import {
   redirectToModels,
 } from "@/lib/utils/utils";
 import { getModels, getModelsCount } from "@/lib/models";
-import React from "react";
-import { redirect } from "next/navigation";
 
 async function page({
   searchParams,

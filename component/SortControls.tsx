@@ -1,4 +1,3 @@
-import React, { TransitionStartFunction } from "react";
 import SortButton from "./SortButton";
 
 function SortControls() {

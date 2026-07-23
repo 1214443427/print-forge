@@ -1,5 +1,4 @@
 import NotFoundUI from "@/component/NotFoundUI";
-import React from "react";
 
 function NotFound() {
   return (
