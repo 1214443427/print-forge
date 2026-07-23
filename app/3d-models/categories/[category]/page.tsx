@@ -1,13 +1,20 @@
 import ModelsBrowser from "@/component/ModelsBrowser";
 import ModelsGrid from "@/component/ModelsGrid";
 import { getCategoryBySlug } from "@/lib/categories";
+import { MODELS_PER_PAGE } from "@/lib/constants";
+import { getSearchParams } from "@/lib/utils/getSearchParams";
 import {
   getModelBySlug,
   getModels,
   getModelsByCategorySlug,
+  getModelsCount,
 } from "@/lib/models";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import React from "react";
+import {
+  redirectOutBound,
+  redirectToModels,
+} from "@/lib/utils/redirectOutBound";
 
 async function page({
   params,
@@ -17,24 +24,51 @@ async function page({
   searchParams: Promise<{ search?: string; sort?: string; page: string }>;
 }) {
   const { category } = await params;
-  const sort = (await searchParams).sort?.toLowerCase() || "";
-  const search = (await searchParams).search?.toLowerCase() || "";
-  const page = Number((await searchParams).page) || 1;
-  const result = getModels({ category, sort, search, page });
-  if (!result.ok) {
-    console.log(result.error);
-    return <h1>500 internal DB error</h1>;
+  const resolvedParams = await searchParams;
+  const { search, sort, page, pageString } = getSearchParams(resolvedParams);
+
+  if (sort === null) {
+    const urlParam = new URLSearchParams(
+      resolvedParams as Record<string, string>,
+    );
+    urlParam.set("sort", "alpha");
+    return redirectToModels(urlParam.toString(), category);
   }
+
+  const result = getModels({
+    category,
+    sort,
+    search,
+    page,
+    modelsPerPage: MODELS_PER_PAGE,
+  });
+  const countResult = getModelsCount({ search, category });
   const categoryResult = getCategoryBySlug(category);
 
-  if (!categoryResult.ok || !categoryResult.category) {
+  if (!result.ok || !countResult.ok || !categoryResult.ok) {
+    return <h1>500 internal DB error</h1>;
+  }
+
+  if (!categoryResult.category) {
     notFound();
   }
 
   const categoryName = categoryResult.category.name;
+  const totalPageNumber = Math.ceil(countResult.count / MODELS_PER_PAGE);
+
+  redirectOutBound(
+    { sort, search, page: pageString },
+    totalPageNumber,
+    category,
+  );
 
   return (
-    <ModelsBrowser search={search} name={categoryName} models={result.models} />
+    <ModelsBrowser
+      search={search}
+      name={categoryName}
+      models={result.models}
+      totalPageNumber={totalPageNumber}
+    />
   );
 }
 

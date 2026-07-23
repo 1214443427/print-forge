@@ -1,20 +1,31 @@
 import ModelsBrowser from "@/component/ModelsBrowser";
 import ModelsGrid from "@/component/ModelsGrid";
 import SearchForm from "@/component/SearchForm";
+import { MODELS_PER_PAGE } from "@/lib/constants";
+import { getSearchParams } from "@/lib/utils/getSearchParams";
 import { getModels, getModelsCount } from "@/lib/models";
 import React from "react";
+import { redirect } from "next/navigation";
+import { redirectOutBound } from "@/lib/utils/redirectOutBound";
 
-const modelsPerPage = 4;
 async function page({
   searchParams,
 }: {
   searchParams: Promise<{ search?: string; sort?: string; page?: string }>;
 }) {
-  const search = (await searchParams).search?.toLowerCase() || "";
-  const sort = (await searchParams).sort?.toLowerCase() || "";
-  const page = Number((await searchParams).page) || 1;
+  const resolvedParams = await searchParams;
+  const { search, sort, page, pageString } = getSearchParams(resolvedParams);
 
-  const result = getModels({ search, sort, page, modelsPerPage });
+  if (sort === null) {
+    return redirect("/3d-models");
+  }
+
+  const result = getModels({
+    search,
+    sort,
+    page,
+    modelsPerPage: MODELS_PER_PAGE,
+  });
   const countResult = getModelsCount({ search });
 
   if (!result.ok || !countResult.ok) {
@@ -22,7 +33,9 @@ async function page({
   }
 
   const models = result.models;
-  const totalPageNumber = Math.ceil(countResult.count / modelsPerPage);
+  const totalPageNumber = Math.ceil(countResult.count / MODELS_PER_PAGE);
+
+  redirectOutBound({ sort, search, page: pageString }, totalPageNumber);
 
   return (
     <ModelsBrowser
