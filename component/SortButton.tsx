@@ -22,6 +22,7 @@ function SortButton({
   function handleSort() {
     const queryParamURL = searchParams.toString();
     const newParams = new URLSearchParams(queryParamURL);
+    newParams.delete("page");
     newParams.set("sort", sortQuery);
     const url = `${pathname}?${newParams.toString()}`;
     startTransition(() => {

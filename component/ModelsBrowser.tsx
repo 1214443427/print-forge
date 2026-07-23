@@ -9,14 +9,16 @@ import PaginationControls from "./PaginationControls";
 
 function ModelsBrowser({
   search,
-  name,
+  categoryName,
   models,
   totalPageNumber,
+  currentPage,
 }: {
   search?: string;
-  name?: string;
+  categoryName?: string;
   models: Model[];
   totalPageNumber: number;
+  currentPage: number;
 }) {
   const [isPending, startTransition] = useTransition();
 
@@ -27,7 +29,9 @@ function ModelsBrowser({
           className="sr-only md:not-sr-only font-montserrat text-3xl font-bold my-5 mr-auto"
           aria-hidden
         >
-          {search ? `Search results for "${search}"` : name}
+          {search
+            ? `Search results for "${search}"${categoryName === "3D Models" ? "" : ` in ${categoryName}`}`
+            : categoryName}
         </h1>
         {/* <div className="flex flex-col w-full md:w-auto items-stretch"> */}
         <SearchForm search={search} startTransition={startTransition} />
@@ -38,7 +42,10 @@ function ModelsBrowser({
         isPending={isPending}
         startTransition={startTransition}
       />
-      <PaginationControls totalPageNumber={totalPageNumber} />
+      <PaginationControls
+        totalPageNumber={totalPageNumber}
+        currentPage={currentPage}
+      />
     </div>
   );
 }

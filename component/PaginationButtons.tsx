@@ -1,18 +1,19 @@
 "use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { TransitionStartFunction } from "react";
+import React from "react";
 
 function PaginationButton({
   pageNumber,
-  startTransition,
+  currentPage,
+  children,
 }: {
   pageNumber: number;
-  startTransition: TransitionStartFunction;
+  currentPage: number;
+  children: React.ReactNode;
 }) {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
-  const currentPage = params.get("page");
 
   const active =
     Number(currentPage) == pageNumber ||
@@ -29,7 +30,7 @@ function PaginationButton({
       onClick={handleClick}
       className={`w-8 h-8 rounded-md border border-gray-300 text-gray-700 cursor-pointer ${active ? "bg-amber-600 text-white" : "hover:bg-gray-100"}`}
     >
-      {pageNumber}
+      {children}
     </button>
   );
 }

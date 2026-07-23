@@ -40,7 +40,8 @@ async function page({
   return (
     <ModelsBrowser
       search={search}
-      name={"3D Models"}
+      categoryName={"3D Models"}
+      currentPage={page}
       models={models}
       totalPageNumber={totalPageNumber}
     />
