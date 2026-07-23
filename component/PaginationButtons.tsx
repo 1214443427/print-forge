@@ -1,6 +1,7 @@
 "use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
+import { useBrowser } from "./ModelsBrowserContext";
 
 function PaginationButton({
   pageNumber,
@@ -15,6 +16,8 @@ function PaginationButton({
   const pathname = usePathname();
   const params = useSearchParams();
 
+  const { startTransition } = useBrowser();
+
   const active =
     Number(currentPage) == pageNumber ||
     (currentPage == null && pageNumber == 1);
@@ -22,7 +25,9 @@ function PaginationButton({
   function handleClick() {
     const searchParams = new URLSearchParams(params.toString());
     searchParams.set("page", pageNumber.toString());
-    router.push(`${pathname}?${searchParams.toString()}`);
+    startTransition(() => {
+      router.push(`${pathname}?${searchParams.toString()}`);
+    });
   }
 
   return (

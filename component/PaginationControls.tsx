@@ -9,7 +9,7 @@ function PaginationControls({
   currentPage: number;
 }) {
   return (
-    <div className="flex gap-1">
+    <div className="flex gap-1 justify-center p-5">
       {
         totalPageNumber > 1 && (
           <>

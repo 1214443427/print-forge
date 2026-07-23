@@ -53,8 +53,6 @@ export function getCategoryBySlug(slug: string):
       )
       .get(slug);
 
-    console.log("logging", category, slug);
-
     return {
       ok: true,
       category: category as Category,

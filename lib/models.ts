@@ -11,7 +11,7 @@ export function getModels({
 }: {
   search?: string;
   category?: string;
-  sort?: string;
+  sort?: string | null;
   page: number;
   modelsPerPage?: number;
 }):
@@ -50,8 +50,6 @@ export function getModels({
         query += ` ORDER BY dateAdded DESC`;
       }
     }
-
-    console.log(page);
 
     query += ` LIMIT ${modelsPerPage}`;
     const offset = (page - 1) * modelsPerPage;

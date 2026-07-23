@@ -23,8 +23,8 @@ function ModelCard({
 }) {
   //  ${type === "compact" ? "w-1/2" : "w-full"}
   return (
-    <Link href={`/3d-models/${id}`} className="w-fit h-full">
-      <div className={`flex flex-col sm:w-67 rounded-2xl h-full`}>
+    <Link href={`/3d-models/${id}`} className="w-full sm:w-fit h-full">
+      <div className={`flex flex-col w-full sm:w-67 rounded-2xl h-full`}>
         <Image
           src={image}
           width={268}
@@ -35,7 +35,11 @@ function ModelCard({
 
         <div className="flex flex-col border border-t-0 rounded-b-lg border-gray-300 p-3.5 gap-4 h-full">
           <h2 className="font-bold text-2xl">{name}</h2>
-          {type !== "compact" && <p className="text-xl">{description}</p>}
+          <p
+            className={`text-xl ${type === "compact" ? "hidden" : "block"} md:block`}
+          >
+            {description}
+          </p>
           <div className="flex flex-col gap-4 mt-auto">
             <TagPill tag={category} />
             <LikesWidget likes={likes} />

@@ -2,19 +2,10 @@ import ModelsBrowser from "@/component/ModelsBrowser";
 import ModelsGrid from "@/component/ModelsGrid";
 import { getCategoryBySlug } from "@/lib/categories";
 import { MODELS_PER_PAGE } from "@/lib/constants";
-import { getSearchParams } from "@/lib/utils/getSearchParams";
-import {
-  getModelBySlug,
-  getModels,
-  getModelsByCategorySlug,
-  getModelsCount,
-} from "@/lib/models";
-import { notFound, redirect } from "next/navigation";
-import React from "react";
-import {
-  redirectOutBound,
-  redirectToModels,
-} from "@/lib/utils/redirectOutBound";
+import { clampPage, getSearchParams } from "@/lib/utils/utils";
+import { getModels, getModelsCount } from "@/lib/models";
+import { notFound } from "next/navigation";
+import { redirectToModels } from "@/lib/utils/utils";
 
 async function page({
   params,
@@ -26,14 +17,6 @@ async function page({
   const { category } = await params;
   const resolvedParams = await searchParams;
   const { search, sort, page, pageString } = getSearchParams(resolvedParams);
-
-  if (sort === null) {
-    const urlParam = new URLSearchParams(
-      resolvedParams as Record<string, string>,
-    );
-    urlParam.set("sort", "alpha");
-    return redirectToModels(urlParam.toString(), category);
-  }
 
   const result = getModels({
     category,
@@ -56,20 +39,32 @@ async function page({
   const categoryName = categoryResult.category.name;
   const totalPageNumber = Math.ceil(countResult.count / MODELS_PER_PAGE);
 
-  redirectOutBound(
-    { sort, search, page: pageString },
-    totalPageNumber,
-    category,
-  );
+  // redirectOutBound(
+  //   { sort, search, page: pageString },
+  //   totalPageNumber,
+  //   category,
+  // );
+
+  const canonicalPage = clampPage(pageString, totalPageNumber);
+  if (canonicalPage != page || isNaN(Number(pageString))) {
+    redirectToModels(
+      new URLSearchParams({ ...resolvedParams, page: String(canonicalPage) }),
+    );
+  }
+
+  if (sort === null) {
+    redirectToModels(new URLSearchParams({ ...resolvedParams, sort: "alpha" }));
+  }
 
   return (
     <ModelsBrowser
       search={search}
-      categoryName={"3D Models"}
+      categoryName={categoryName}
       currentPage={page}
-      models={result.models}
       totalPageNumber={totalPageNumber}
-    />
+    >
+      <ModelsGrid models={result.models} type={search ? "compact" : "full"} />
+    </ModelsBrowser>
   );
 }
 

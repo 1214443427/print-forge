@@ -1,16 +1,15 @@
 "use client";
 
-import React, { TransitionStartFunction } from "react";
+import React, { TransitionStartFunction, useContext } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useBrowser } from "./ModelsBrowserContext";
 
 function SortButton({
   children,
   sortQuery,
-  startTransition,
 }: {
   children: React.ReactNode;
   sortQuery: string;
-  startTransition: TransitionStartFunction;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -18,6 +17,8 @@ function SortButton({
 
   const queryParam = searchParams.get("sort");
   const active = queryParam === sortQuery;
+
+  const { startTransition } = useBrowser();
 
   function handleSort() {
     const queryParamURL = searchParams.toString();

@@ -2,11 +2,14 @@ import ModelsBrowser from "@/component/ModelsBrowser";
 import ModelsGrid from "@/component/ModelsGrid";
 import SearchForm from "@/component/SearchForm";
 import { MODELS_PER_PAGE } from "@/lib/constants";
-import { getSearchParams } from "@/lib/utils/getSearchParams";
+import {
+  clampPage,
+  getSearchParams,
+  redirectToModels,
+} from "@/lib/utils/utils";
 import { getModels, getModelsCount } from "@/lib/models";
 import React from "react";
 import { redirect } from "next/navigation";
-import { redirectOutBound } from "@/lib/utils/redirectOutBound";
 
 async function page({
   searchParams,
@@ -15,10 +18,6 @@ async function page({
 }) {
   const resolvedParams = await searchParams;
   const { search, sort, page, pageString } = getSearchParams(resolvedParams);
-
-  if (sort === null) {
-    return redirect("/3d-models");
-  }
 
   const result = getModels({
     search,
@@ -35,16 +34,27 @@ async function page({
   const models = result.models;
   const totalPageNumber = Math.ceil(countResult.count / MODELS_PER_PAGE);
 
-  redirectOutBound({ sort, search, page: pageString }, totalPageNumber);
+  const canonicalPage = clampPage(pageString, totalPageNumber);
+
+  if (canonicalPage != page || isNaN(Number(pageString))) {
+    redirectToModels(
+      new URLSearchParams({ ...resolvedParams, page: String(canonicalPage) }),
+    );
+  }
+
+  if (sort === null) {
+    redirectToModels(new URLSearchParams({ ...resolvedParams, sort: "alpha" }));
+  }
 
   return (
     <ModelsBrowser
       search={search}
       categoryName={"3D Models"}
       currentPage={page}
-      models={models}
       totalPageNumber={totalPageNumber}
-    />
+    >
+      <ModelsGrid models={models} type={search ? "compact" : "full"} />
+    </ModelsBrowser>
   );
 }
 

@@ -1,16 +1,13 @@
-import React, { TransitionStartFunction } from "react";
+import React from "react";
 import Form from "next/form";
 import { usePathname, useRouter } from "next/navigation";
+import { useBrowser } from "./ModelsBrowserContext";
 
-function SearchForm({
-  search,
-  startTransition,
-}: {
-  search?: string;
-  startTransition: TransitionStartFunction;
-}) {
+function SearchForm({ search }: { search?: string }) {
   const pathname = usePathname();
   const router = useRouter();
+
+  const { startTransition } = useBrowser();
 
   function handleSearch(formData: FormData) {
     const search = formData.get("search")?.toString().trim() || "";
