@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run seed && next build",
     "start": "next start",
     "lint": "eslint",
+    "seed": "tsx lib/seeds/seed_categories.ts && tsx lib/seeds/seed_models.ts",
     "format:check": "npx prettier . --check",
     "format:write": "npx prettier . --write"
   },

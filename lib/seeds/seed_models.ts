@@ -1,4 +1,4 @@
-import { db } from "../db";
+import { db } from "./seed_db";
 import models from "../data/models.json";
 
 function seedModels() {

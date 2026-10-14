@@ -1,4 +1,4 @@
-import { db } from "../db";
+import { db } from "./seed_db";
 import categories from "../data/categories.json";
 
 function seedCategories() {
