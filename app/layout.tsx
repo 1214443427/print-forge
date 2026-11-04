@@ -1,6 +1,7 @@
 import Navbar from "@/component/Navbar";
 import "./globals.css";
 import { Albert_Sans, Montserrat_Alternates, Roboto } from "next/font/google";
+import ChatBox from "@/component/ChatBox";
 
 const albertSans = Albert_Sans({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
       >
         <Navbar />
         {children}
+        <ChatBox />
       </body>
     </html>
   );

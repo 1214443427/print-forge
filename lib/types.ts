@@ -12,3 +12,5 @@ export type Model = {
   category: string;
   dateAdded: string;
 };
+
+export type ChatMessage = { role: "user" | "assistant"; message: string };
