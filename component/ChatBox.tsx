@@ -10,6 +10,8 @@ import React, {
 import Loading from "./Loading";
 import { readStream } from "@/lib/utils/utils";
 import ModelCard from "./ModelCard";
+import ChatBoxModelCard from "./ChatBoxModelCard";
+import Markdown from "react-markdown";
 
 const INITIAL_MESSAGES: ChatMessage[] = [
   {
@@ -111,6 +113,7 @@ function ChatBox({
   );
 
   const scrollBoxRef = useRef<HTMLDivElement>(null);
+
   const formRef = useRef<HTMLFormElement>(null);
 
   const [optimisticMessages, setOptimisticMessages] =
@@ -156,18 +159,11 @@ function ChatBox({
                 {Object.hasOwn(message, "loading") && message.loading ? (
                   <Loading />
                 ) : (
-                  message.message.map((chunk) => {
+                  message.message.map((chunk, index) => {
                     return chunk.type === "text" ? (
-                      <p>{chunk.content}</p>
+                      <Markdown key={index}>{chunk.content}</Markdown>
                     ) : (
-                      <ModelCard
-                        type="compact"
-                        id={chunk.id}
-                        name="test"
-                        category="props"
-                        likes={123}
-                        description="abc"
-                      />
+                      <ChatBoxModelCard id={chunk.id} key={index} />
                     );
                   })
                 )}
